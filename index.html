@@ -1,0 +1,116 @@
+<html>
+	<head>
+		<title>Simple Test</title>
+		<style type="text/css">
+			#wrapper {
+				margin: 0 auto;
+				padding: 10px;
+				border: 1px solid black;
+				width: 750px;
+			}
+			
+			#expression {
+				float: left;
+				padding: 10px;
+				font-weight: 1.5em;
+				width: 55%;
+			}
+			#footer { clear: both; }
+			#status { 
+				float: right;
+				padding: 44px;
+				border: 1px solid black;
+				width: 45%;
+			}
+		</style>
+	</head>
+	
+	<body>
+		<div id="wrapper">
+		
+			<div id="header">
+				<span>How Many Questions</span><br/><br/>
+				<input type="text" id="numQuestions" size="4"/><br/><br/>
+				<button id="numQuestionsBt" onclick="setupPage()">Start</button>
+			</div>
+			
+			<br/>
+			
+			<div id="expression"><h2>Enter # of Questions and Click Start To Begin!</h2></div>
+				
+			<div id="status">
+				<h2># of Right/Wrong Answers</h2>
+				<div id="rightAns">Number of Right Answers: 0</div> <br/>
+				<div id="wrongAns" style="color: red;">Number of Wrong Answers: 0</div> <br/>
+			</div>
+
+			<div id="footer">
+				<span>Enter Answer Below in The BOX</span><br/><br/>
+				<input type="text" id="answer" size="4"/><br/><br/>
+				<button id="bt" onclick="evaluateAnswer()">Submit</button>
+			</div>
+		</div>
+		
+	</body>
+	
+	<script type="text/javascript">
+		window.onload = 
+			(function () {
+				var num1, num2, correct=0, incorrect=0, numQuestions;
+				
+				// global function used as an event handler
+				this.setupPage = function() {
+					
+					// set variable holding number of questions on the test, and hide the prompt
+					numQuestions = document.getElementById('numQuestions').value;
+					document.getElementById('header').style.display = 'none';
+				
+					// calls private method used to generate a question, and display it
+					generateQuestion();
+				}
+				
+				// gloabal function used as an event handler (submit button click)
+				this.evaluateAnswer = function() {
+		
+					var answerTxtBox = document.getElementById('answer');
+					var correctAnswer = Number(num1+num2);
+					var yourAnswer = answerTxtBox.value;
+					
+					if (yourAnswer == correctAnswer) {
+						alert ('You Answered Correctly!');
+						var element = document.getElementById('rightAns');
+						element.textContent = 'Number of Right Answers: ' + (++correct);
+					}
+					else {
+						alert ('Incorrect Answer!!!!!!!');
+						var element = document.getElementById('wrongAns');
+						element.textContent = 'Number of Wrong Answers: ' + (++incorrect);
+					}
+					
+					if ((correct+incorrect) == numQuestions) {
+						var output = 'Your Score: ' + correct + '/' + Number(incorrect+correct);
+						alert ('GAME OVER! ' + output);
+						setTimeout(window.location.reload(), 1000);
+					}
+					
+					generateQuestion();
+					answerTxtBox.value="";
+					answerTxtBox.focus();
+				}
+				
+				// private method used to generate a question, and display it
+				function generateQuestion() {
+					var expression = document.getElementById('expression');
+					num1 = Math.floor((Math.random()*10+1));
+					num2 = Math.floor((Math.random()*10+1));
+					expression.textContent = num1 + ' + ' + num2 + ' = ? ';
+					
+					expression.style.border = '1px solid black';
+					expression.style.height = '50px';
+					expression.style.width = '200px';
+					expression.style.fontSize = '2.5em';
+				}
+			})();
+		
+	</script>
+</html>
